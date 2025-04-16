@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>泉南市 ごみ収集カレンダー (可燃ごみ 火・金コース)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c7873;
+            --secondary-color: #52de97;
+            --accent-color: #ff7e67;
+            --light-bg: #f7f9fb;
+            --dark-text: #2d3436;
+            --light-text: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --burnable-color: #ff7e67;
+            --pet-color: #78e08f;
+            --plastic-color: #ffeaa7;
+            --bin-can-color: #ff6b6b;
+            --paper-color: #ffa502;
+            --cloth-color: #c44dff;
+            --no-collection-color: #d3d3d3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .course-badge {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 0 10px;
+        }
+
+        #calendarTitle {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #1e5954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .calendar-container {
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #calendarTable {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 3px;
+            table-layout: fixed;
+        }
+
+        #calendarTable th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            font-weight: 500;
+            text-align: center;
+            border-radius: 6px 6px 0 0;
+        }
+
+        #calendarTable th.sun {
+            background-color: #ff6b6b;
+        }
+
+        #calendarTable th.sat {
+            background-color: #5c88da;
+        }
+
+        #calendarTable td {
+            border: 1px solid #e8e8e8;
+            padding: 8px 4px;
+            text-align: center;
+            vertical-align: top;
+            height: 100px;
+            background-color: #fff;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        #calendarTable td:hover {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        #calendarTable .date {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: block;
+            position: relative;
+        }
+
+        #calendarTable .sun .date {
+            color: #ff6b6b;
+        }
+
+        #calendarTable .sat .date {
+            color: #5c88da;
+        }
+
+        #calendarTable .other-month {
+            background-color: #f9f9f9;
+            opacity: 0.6;
+        }
+
+        #calendarTable .other-month .date {
+            color: #bbb;
+        }
+
+        #calendarTable .today {
+            box-shadow: 0 0 12px rgba(82, 222, 151, 0.5);
+            border: 2px solid var(--secondary-color);
+        }
+
+        #calendarTable .today .date:after {
+            content: "今日";
+            position: absolute;
+            top: -2px;
+            right: -3px;
+            background-color: var(--secondary-color);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .garbage-item {
+            display: block;
+            font-size: 0.8rem;
+            padding: 3px 5px;
+            margin: 2px 0;
+            border-radius: 4px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .garbage-item-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 3px;
+            vertical-align: middle;
+        }
+
+        .garbage-item.burnable { 
+            background-color: var(--burnable-color); 
+            color: white;
+        }
+        .garbage-item.pet { 
+            background-color: var(--pet-color); 
+        }
+        .garbage-item.plastic { 
+            background-color: var(--plastic-color); 
+        }
+        .garbage-item.bin-can { 
+            background-color: var(--bin-can-color); 
+            color: white;
+        }
+        .garbage-item.paper, .garbage-item.paper-holiday { 
+            background-color: var(--paper-color); 
+        }
+        .garbage-item.cloth { 
+            background-color: var(--cloth-color); 
+            color: white;
+        }
+        .garbage-item.no-collection, .garbage-item.no-collection-holiday { 
+            background-color: var(--no-collection-color); 
+            color: #666;
+        }
+
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .legend h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend h3:before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 20px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        #legendList {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+        }
+
+        #legendList li {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        #legendList .color-chip {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            margin-top: 30px;
+            padding: 15px 20px;
+            text-align: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .note-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+        /* 点滅アニメーション (今日の日付用) */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(82, 222, 151, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(82, 222, 151, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(82, 222, 151, 0); }
+        }
+
+        /* スマートフォン向けのスタイル */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .main-content { padding: 15px 10px; }
+            h1 { font-size: 1.4rem; }
+            .course-badge { font-size: 0.9rem; }
+            #calendarTitle { font-size: 1.2rem; }
+            .btn { padding: 6px 12px; font-size: 0.9rem; }
+            #calendarTable th, #calendarTable td { padding: 5px 2px; }
+            #calendarTable td { height: 70px; }
+            #calendarTable .date { font-size: 0.9rem; }
+            .garbage-item { font-size: 0.7rem; padding: 2px 4px; }
+            #legendList li { font-size: 0.8rem; }
+            
+            /* 2列レイアウトのレジェンド */
+            #legendList {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 1.2rem; }
+            .course-badge { font-size: 0.8rem; }
+            #calendarTable td { height: 60px; }
+            .garbage-item { font-size: 0.65rem; }
+            #legendList { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>泉南市 令和7年度 ごみ収集カレンダー</h1>
+            <div class="course-badge">可燃ごみ 火・金コース</div>
+        </header>
+
+        <div class="main-content">
+            <div class="calendar-controls">
+                <button id="prevMonth" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                    前の月
+                </button>
+                <h2 id="calendarTitle">2025年 4月</h2>
+                <button id="nextMonth" class="btn">
+                    次の月
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="calendar-container">
+                <table id="calendarTable">
+                    <thead>
+                        <tr>
+                            <th class="sun">日</th>
+                            <th>月</th>
+                            <th>火</th>
+                            <th>水</th>
+                            <th>木</th>
+                            <th>金</th>
+                            <th class="sat">土</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- カレンダーの日付はJavaScriptで生成 -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="legend">
+                <h3>ごみ収集の種類</h3>
+                <ul id="legendList">
+                    <!-- 凡例はJavaScriptで生成 -->
+                </ul>
+            </div>
+
+            <footer>
+                <p class="note">
+                    <svg class="note-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
+                    このカレンダーは泉南市の公開情報に基づき作成していますが、正確な情報は必ず泉南市の公式サイト等でご確認ください。<br>
+                    年末年始や祝日の収集は変更される場合があります。
+                </p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarTitle = document.getElementById('calendarTitle');
+            const calendarBody = document.querySelector('#calendarTable tbody');
+            const prevMonthButton = document.getElementById('prevMonth');
+            const nextMonthButton = document.getElementById('nextMonth');
+            const legendList = document.getElementById('legendList');
+
+            // --- ゴミ収集データ ---
+            const garbageData = {
+                "2025": {
+                    "4": { "1": ["可燃"], "2": ["ペット"], "3": ["プラ"], "4": ["可燃"], "7": ["新聞紙"], "8": ["可燃"], "9": ["びん缶"], "10": ["プラ"], "11": ["可燃"], "14": ["古着"], "15": ["可燃"], "16": ["ペット"], "17": ["プラ"], "18": ["可燃"], "21": ["新聞紙"], "22": ["可燃"], "23": ["びん缶"], "24": ["プラ"], "25": ["可燃"], "28": ["新聞紙"], "29": ["－(祝)"], "30": ["可燃"] },
+                    "5": { "1": ["プラ"], "2": ["可燃"], "5": ["－(祝)"], "6": ["－(祝)"], "7": ["びん缶"], "8": ["プラ"], "9": ["可燃"], "12": ["古着"], "13": ["可燃"], "14": ["ペット"], "15": ["プラ"], "16": ["可燃"], "19": ["新聞紙"], "20": ["可燃"], "21": ["びん缶"], "22": ["プラ"], "23": ["可燃"], "26": ["新聞紙"], "27": ["可燃"], "28": ["ペット"], "29": ["プラ"], "30": ["可燃"] },
+                    "6": { "2": ["新聞紙"], "3": ["可燃"], "4": ["びん缶"], "5": ["プラ"], "6": ["可燃"], "9": ["新聞紙"], "10": ["可燃"], "11": ["ペット"], "12": ["プラ"], "13": ["可燃"], "16": ["古着"], "17": ["可燃"], "18": ["びん缶"], "19": ["プラ"], "20": ["可燃"], "23": ["新聞紙"], "24": ["可燃"], "25": ["ペット"], "26": ["プラ"], "27": ["可燃"], "30": ["新聞紙"] },
+                    "7": { "1": ["可燃"], "2": ["びん缶"], "3": ["プラ"], "4": ["可燃"], "7": ["新聞紙"], "8": ["可燃"], "9": ["ペット"], "10": ["プラ"], "11": ["可燃"], "14": ["古着"], "15": ["可燃"], "16": ["びん缶"], "17": ["プラ"], "18": ["可燃"], "21": ["－(祝)"], "22": ["可燃"], "23": ["ペット"], "24": ["プラ"], "25": ["可燃"], "28": ["新聞紙"], "29": ["可燃"], "30": ["びん缶"], "31": ["プラ"] },
+                    "8": { "1": ["可燃"], "4": ["新聞紙"], "5": ["可燃"], "6": ["ペット"], "7": ["プラ"], "8": ["可燃"], "11": ["－(祝)"], "12": ["可燃"], "13": ["びん缶"], "14": ["プラ"], "15": ["可燃"], "18": ["古着"], "19": ["可燃"], "20": ["ペット"], "21": ["プラ"], "22": ["可燃"], "25": ["新聞紙"], "26": ["可燃"], "27": ["びん缶"], "28": ["プラ"], "29": ["可燃"] },
+                    "9": { "1": ["新聞紙"], "2": ["可燃"], "3": ["ペット"], "4": ["プラ"], "5": ["可燃"], "8": ["新聞紙"], "9": ["可燃"], "10": ["びん缶"], "11": ["プラ"], "12": ["可燃"], "15": ["－(祝)"], "16": ["古着"], "17": ["可燃"], "18": ["プラ"], "19": ["可燃"], "22": ["新聞紙"], "23": ["－(祝)"], "24": ["可燃"], "25": ["プラ"], "26": ["可燃"], "29": ["新聞紙"], "30": ["可燃"] },
+                    "10": { "1": ["ペット"], "2": ["プラ"], "3": ["可燃"], "6": ["新聞紙"], "7": ["可燃"], "8": ["びん缶"], "9": ["プラ"], "10": ["可燃"], "13": ["－(祝)"], "14": ["古着"], "15": ["可燃"], "16": ["プラ"], "17": ["可燃"], "20": ["新聞紙"], "21": ["可燃"], "22": ["ペット"], "23": ["プラ"], "24": ["可燃"], "27": ["新聞紙"], "28": ["可燃"], "29": ["びん缶"], "30": ["プラ"], "31": ["可燃"] },
+                    "11": { "3": ["－(祝)"], "4": ["新聞紙"], "5": ["可燃"], "6": ["プラ"], "7": ["可燃"], "10": ["古着"], "11": ["可燃"], "12": ["ペット"], "13": ["プラ"], "14": ["可燃"], "17": ["新聞紙"], "18": ["可燃"], "19": ["びん缶"], "20": ["プラ"], "21": ["可燃"], "24": ["－(祝)"], "25": ["新聞紙"], "26": ["可燃"], "27": ["プラ"], "28": ["可燃"] },
+                    "12": { "1": ["新聞紙"], "2": ["可燃"], "3": ["ペット"], "4": ["プラ"], "5": ["可燃"], "8": ["新聞紙"], "9": ["可燃"], "10": ["びん缶"], "11": ["プラ"], "12": ["可燃"], "15": ["古着"], "16": ["可燃"], "17": ["ペット"], "18": ["プラ"], "19": ["可燃"], "22": ["新聞紙"], "23": ["可燃"], "24": ["びん缶"], "25": ["プラ"], "26": ["可燃"], "29": ["－"], "30": ["可燃"], "31": ["－"] }
+                },
+                "2026": {
+                    "1": { "1": ["－(祝)"], "2": ["－"], "5": ["－"], "6": ["可燃"], "7": ["ペット"], "8": ["プラ"], "9": ["可燃"], "12": ["－(祝)"], "13": ["新聞紙"], "14": ["可燃"], "15": ["プラ"], "16": ["可燃"], "19": ["古着"], "20": ["可燃"], "21": ["ペット"], "22": ["プラ"], "23": ["可燃"], "26": ["新聞紙"], "27": ["可燃"], "28": ["びん缶"], "29": ["プラ"], "30": ["可燃"] },
+                    "2": { "2": ["新聞紙"], "3": ["可燃"], "4": ["びん缶"], "5": ["プラ"], "6": ["可燃"], "9": ["新聞紙"], "10": ["可燃"], "11": ["－(祝)"], "12": ["プラ"], "13": ["可燃"], "16": ["古着"], "17": ["可燃"], "18": ["ペット"], "19": ["プラ"], "20": ["可燃"], "23": ["－(祝)"], "24": ["新聞紙"], "25": ["可燃"], "26": ["プラ"], "27": ["可燃"] },
+                    "3": { "2": ["新聞紙"], "3": ["可燃"], "4": ["びん缶"], "5": ["プラ"], "6": ["可燃"], "9": ["新聞紙"], "10": ["可燃"], "11": ["ペット"], "12": ["プラ"], "13": ["可燃"], "16": ["古着"], "17": ["可燃"], "18": ["びん缶"], "19": ["プラ"], "20": ["－(祝)"], "23": ["新聞紙"], "24": ["可燃"], "25": ["ペット"], "26": ["プラ"], "27": ["可燃"], "30": ["新聞紙"], "31": ["可燃"] }
+                }
+            };
+
+            // --- ゴミの種類定義 ---
+            const garbageTypes = {
+                "可燃": { class: "burnable", name: "可燃ごみ", icon: "🔥" },
+                "ペット": { class: "pet", name: "ペットボトル", icon: "🥤" },
+                "プラ": { class: "plastic", name: "プラスチック製容器包装", icon: "♻️" },
+                "びん缶": { class: "bin-can", name: "びん・かん", icon: "🍶" },
+                "新聞紙": { class: "paper", name: "新聞・紙・段ボール", icon: "📰" },
+                "古着": { class: "cloth", name: "古着・古布", icon: "👕" },
+                "－": { class: "no-collection", name: "収集なし", icon: "✖️" },
+                "－(祝)": { class: "no-collection-holiday", name: "収集なし(祝日)", icon: "🎌" },
+                "新聞紙(祝)": { class: "paper-holiday", name: "新聞・紙・段ボール(祝日)", icon: "📰" },
+            };
+
+            // --- 初期表示の年月 ---
+            let currentYear = 2025;
+            let currentMonth = 4; // 4月 (0-indexedではなく1-indexed)
+
+            // --- カレンダー生成関数 ---
+            function generateCalendar(year, month) {
+                calendarBody.innerHTML = ''; // カレンダー内容をクリア
+                calendarTitle.textContent = `${year}年 ${month}月`;
+
+                const firstDay = new Date(year, month - 1, 1); // 月は0-indexedなので-1
+                const lastDay = new Date(year, month, 0); // その月の最終日
+                const daysInMonth = lastDay.getDate();
+                const startDayOfWeek = firstDay.getDay(); // 0:日曜, 1:月曜...
+
+                const today = new Date();
+                const todayDate = today.getDate();
+                const todayMonth = today.getMonth() + 1;
+                const todayYear = today.getFullYear();
+
+                let date = 1;
+                for (let i = 0; i < 6; i++) { // 最大6週間表示
+                    const row = document.createElement('tr');
+                    let weekHasDates = false; // その週に日付が含まれるか
+
+                    for (let j = 0; j < 7; j++) { // 曜日ループ (日〜土)
+                        const cell = document.createElement('td');
+                        const dayOfMonth = date; // ループ開始時の日付を保持
+
+                        if (i === 0 && j < startDayOfWeek) {
+                            // 月の最初の曜日まで空白セル
+                            cell.classList.add('other-month');
+                        } else if (date > daysInMonth) {
+                            // 月の最終日以降は空白セル
+                            cell.classList.add('other-month');
+                        } else {
+                            // 日付セル
+                            weekHasDates = true;
+                            cell.innerHTML = `<span class="date">${date}</span>`;
+
+                            // 曜日に応じたクラス付与 (CSSでの色分け用)
+                            if (j === 0) cell.classList.add('sun'); // 日曜日
+                            if (j === 6) cell.classList.add('sat'); // 土曜日
+
+                            // 今日の日付に印をつける
+                            if (date === todayDate && month === todayMonth && year === todayYear) {
+                                cell.classList.add('today');
+                            }
+
+                            // ゴミ収集情報を追加
+                            const yearStr = String(year);
+                            const monthStr = String(month);
+                            const dateStr = String(date);
+
+                            if (garbageData[yearStr] && garbageData[yearStr][monthStr] && garbageData[yearStr][monthStr][dateStr]) {
+                                garbageData[yearStr][monthStr][dateStr].forEach(itemKey => {
+                                    if (garbageTypes[itemKey]) {
+                                        const itemInfo = garbageTypes[itemKey];
+                                        const garbageDiv = document.createElement('div');
+                                        garbageDiv.classList.add('garbage-item', itemInfo.class);
+                                        garbageDiv.innerHTML = 
+                                            `<span class="garbage-item-icon">${itemInfo.icon}</span>${itemInfo.name}`;
+                                        cell.appendChild(garbageDiv);
+                                    }
+                                });
+                            }
+                            date++;
+                        }
+                        row.appendChild(cell);
+                    }
+
+                    if(weekHasDates){ // 日付が含まれる週のみ表示
+                         calendarBody.appendChild(row);
+                    } else {
+                         // 日付を含まない週（全てother-monthの場合）は追加しない
+                         break; // ループを抜ける
+                    }
+                }
+            }
+
+            // --- 凡例生成関数 ---
+            function generateLegend() {
+                legendList.innerHTML = '';
+                for (const key in garbageTypes) {
+                    const item = garbageTypes[key];
+                    const li = document.createElement('li');
+                    
+                    // 色見本を作成
+                    const colorChip = document.createElement('span');
+                    colorChip.classList.add('color-chip');
+                    colorChip.style.backgroundColor = getComputedStyle(document.documentElement)
+                        .getPropertyValue(`--${item.class}-color`);
+                    
+                    li.appendChild(colorChip);
+                    li.innerHTML += `${item.icon} ${item.name}`;
+                    legendList.appendChild(li);
+                }
+            }
+
+            // --- イベントリスナー ---
+            prevMonthButton.addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 1) {
+                    currentMonth = 12;
+                    currentYear--;
+                }
+                // データ範囲チェック (2025/4より前には行かせない)
+                if (currentYear < 2025 || (currentYear === 2025 && currentMonth < 4)) {
+                    currentYear = 2025;
+                    currentMonth = 4;
+                    return; // 何もせず終了
+                }
+                generateCalendar(currentYear, currentMonth);
+            });
+
+            nextMonthButton.addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 12) {
+                    currentMonth = 1;
+                    currentYear++;
+                }
+                 // データ範囲チェック (2026/3より後には行かせない)
+                if (currentYear > 2026 || (currentYear === 2026 && currentMonth > 3)) {
+                    currentYear = 2026;
+                    currentMonth = 3;
+                    return; // 何もせず終了
+                }
+                generateCalendar(currentYear, currentMonth);
+            });
+
+            // タイトルをクリックすると今日の月に戻る機能
+            calendarTitle.addEventListener('click', () => {
+                const now = new Date();
+                const thisYear = now.getFullYear();
+                const thisMonth = now.getMonth() + 1;
+                
+                // データの範囲内かチェック
+                if (thisYear >= 2025 && thisYear <= 2026) {
+                    if ((thisYear === 2025 && thisMonth >= 4) || (thisYear === 2026 && thisMonth <= 3)) {
+                        currentYear = thisYear;
+                        currentMonth = thisMonth;
+                        generateCalendar(currentYear, currentMonth);
+                    }
+                }
+            });
+
+            // スワイプ操作のサポート
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            document.querySelector('.calendar-container').addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, false);
+            
+            document.querySelector('.calendar-container').addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, false);
+            
+            function handleSwipe() {
+                const swipeThreshold = 50; // スワイプと判定する最小距離
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // 左スワイプ → 次の月
+                    nextMonthButton.click();
+                }
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    // 右スワイプ → 前の月
+                    prevMonthButton.click();
+                }
+            }
+
+            // 初期化
+            generateCalendar(currentYear, currentMonth);
+            generateLegend();
+            
+            // ローディング表示の削除とコンテンツ表示
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>

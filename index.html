@@ -125,14 +125,15 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
-        #calendarTable {
+        /* デスクトップ用カレンダー表示 */
+        .desktop-calendar {
             width: 100%;
             border-collapse: separate;
             border-spacing: 3px;
             table-layout: fixed;
         }
 
-        #calendarTable th {
+        .desktop-calendar th {
             background-color: var(--primary-color);
             color: white;
             padding: 10px;
@@ -141,15 +142,15 @@
             border-radius: 6px 6px 0 0;
         }
 
-        #calendarTable th.sun {
+        .desktop-calendar th.sun {
             background-color: #ff6b6b;
         }
 
-        #calendarTable th.sat {
+        .desktop-calendar th.sat {
             background-color: #5c88da;
         }
 
-        #calendarTable td {
+        .desktop-calendar td {
             border: 1px solid #e8e8e8;
             padding: 8px 4px;
             text-align: center;
@@ -160,46 +161,172 @@
             transition: all 0.2s ease;
         }
 
-        #calendarTable td:hover {
+        .desktop-calendar td:hover {
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
 
-        #calendarTable .date {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            display: block;
+        /* スマホ用ウィークリーカレンダー表示 */
+        .weekly-calendar {
+            display: none;
+            width: 100%;
+        }
+        
+        .week-selector {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .week-navigation {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .week-range {
+            text-align: center;
+            flex-grow: 1;
+            font-weight: 500;
+            color: var(--primary-color);
+            padding: 0 5px;
+        }
+        
+        .week-nav-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .week-nav-btn:hover {
+            background-color: #1e5954;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .week-nav-btn:active {
+            transform: translateY(0);
+        }
+        
+        .week-nav-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .today-indicator {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 0.7rem;
+            padding: 1px 5px;
+            border-radius: 10px;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .week-container {
+            margin-bottom: 20px;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .week-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 8px 12px;
+            font-weight: 500;
+            text-align: center;
+            position: relative;
+        }
+        
+        .today-badge {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        
+        .today-item {
+            background-color: rgba(82, 222, 151, 0.05);
+        }
+
+        .week-days {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .day-item {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            min-height: 60px;
+        }
+
+        .day-item:last-child {
+            border-bottom: none;
+        }
+
+        .day-label {
+            width: 80px;
+            padding: 10px;
+            background-color: #f8f8f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
             position: relative;
         }
 
-        #calendarTable .sun .date {
+        .day-label.sun {
+            background-color: #fff5f5;
             color: #ff6b6b;
         }
 
-        #calendarTable .sat .date {
+        .day-label.sat {
+            background-color: #f5f8ff;
             color: #5c88da;
         }
 
-        #calendarTable .other-month {
-            background-color: #f9f9f9;
-            opacity: 0.6;
+        .day-content {
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
 
-        #calendarTable .other-month .date {
-            color: #bbb;
+        .day-date {
+            font-weight: 700;
+            font-size: 1.1rem;
+            position: relative;
         }
 
-        #calendarTable .today {
-            box-shadow: 0 0 12px rgba(82, 222, 151, 0.5);
-            border: 2px solid var(--secondary-color);
-        }
-
-        #calendarTable .today .date:after {
-            content: "今日";
+        .today-marker {
             position: absolute;
             top: -2px;
-            right: -3px;
+            right: -2px;
             background-color: var(--secondary-color);
             color: white;
             font-size: 0.6rem;
@@ -209,21 +336,20 @@
         }
 
         .garbage-item {
-            display: block;
+            display: flex;
+            align-items: center;
             font-size: 0.8rem;
             padding: 3px 5px;
             margin: 2px 0;
             border-radius: 4px;
             font-weight: 500;
-            position: relative;
         }
 
         .garbage-item-icon {
             display: inline-block;
             width: 16px;
             height: 16px;
-            margin-right: 3px;
-            vertical-align: middle;
+            margin-right: 5px;
         }
 
         .garbage-item.burnable { 
@@ -250,6 +376,10 @@
         .garbage-item.no-collection, .garbage-item.no-collection-holiday { 
             background-color: var(--no-collection-color); 
             color: #666;
+        }
+
+        .other-month .day-date {
+            color: #bbb;
         }
 
         .legend {
@@ -325,14 +455,7 @@
             vertical-align: middle;
         }
 
-        /* 点滅アニメーション (今日の日付用) */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(82, 222, 151, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(82, 222, 151, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(82, 222, 151, 0); }
-        }
-
-        /* スマートフォン向けのスタイル */
+        /* メディアクエリ - スマホ表示切替 */
         @media (max-width: 768px) {
             body { padding: 10px; }
             .main-content { padding: 15px 10px; }
@@ -340,25 +463,36 @@
             .course-badge { font-size: 0.9rem; }
             #calendarTitle { font-size: 1.2rem; }
             .btn { padding: 6px 12px; font-size: 0.9rem; }
-            #calendarTable th, #calendarTable td { padding: 5px 2px; }
-            #calendarTable td { height: 70px; }
-            #calendarTable .date { font-size: 0.9rem; }
-            .garbage-item { font-size: 0.7rem; padding: 2px 4px; }
-            #legendList li { font-size: 0.8rem; }
+
+            /* デスクトップカレンダーを非表示 */
+            .desktop-calendar {
+                display: none;
+            }
             
-            /* 2列レイアウトのレジェンド */
+            /* ウィークリーカレンダーを表示 */
+            .weekly-calendar {
+                display: block;
+            }
+            
             #legendList {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 8px;
+            }
+            
+            .legend h3 {
+                font-size: 1.1rem;
+            }
+            
+            #legendList li {
+                font-size: 0.8rem;
             }
         }
 
         @media (max-width: 480px) {
             h1 { font-size: 1.2rem; }
             .course-badge { font-size: 0.8rem; }
-            #calendarTable td { height: 60px; }
-            .garbage-item { font-size: 0.65rem; }
+            .day-label { width: 60px; }
             #legendList { grid-template-columns: 1fr; }
         }
     </style>
@@ -388,7 +522,8 @@
             </div>
 
             <div class="calendar-container">
-                <table id="calendarTable">
+                <!-- デスクトップ用カレンダー表示 -->
+                <table id="desktopCalendar" class="desktop-calendar">
                     <thead>
                         <tr>
                             <th class="sun">日</th>
@@ -404,6 +539,11 @@
                         <!-- カレンダーの日付はJavaScriptで生成 -->
                     </tbody>
                 </table>
+                
+                <!-- スマホ用ウィークリーカレンダー表示 -->
+                <div id="weeklyCalendar" class="weekly-calendar">
+                    <!-- 週ごとのビューはJavaScriptで生成 -->
+                </div>
             </div>
 
             <div class="legend">
@@ -430,11 +570,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const calendarTitle = document.getElementById('calendarTitle');
-            const calendarBody = document.querySelector('#calendarTable tbody');
+            const desktopCalendarBody = document.querySelector('#desktopCalendar tbody');
+            const weeklyCalendarContainer = document.getElementById('weeklyCalendar');
             const prevMonthButton = document.getElementById('prevMonth');
             const nextMonthButton = document.getElementById('nextMonth');
             const legendList = document.getElementById('legendList');
 
+            // 曜日の日本語表記
+            const weekdayNames = ["日", "月", "火", "水", "木", "金", "土"];
+            
             // --- ゴミ収集データ ---
             const garbageData = {
                 "2025": {
@@ -472,11 +616,10 @@
             let currentYear = 2025;
             let currentMonth = 4; // 4月 (0-indexedではなく1-indexed)
 
-            // --- カレンダー生成関数 ---
-            function generateCalendar(year, month) {
-                calendarBody.innerHTML = ''; // カレンダー内容をクリア
-                calendarTitle.textContent = `${year}年 ${month}月`;
-
+            // --- デスクトップカレンダー生成関数 ---
+            function generateDesktopCalendar(year, month) {
+                desktopCalendarBody.innerHTML = ''; // カレンダー内容をクリア
+                
                 const firstDay = new Date(year, month - 1, 1); // 月は0-indexedなので-1
                 const lastDay = new Date(year, month, 0); // その月の最終日
                 const daysInMonth = lastDay.getDate();
@@ -539,12 +682,274 @@
                     }
 
                     if(weekHasDates){ // 日付が含まれる週のみ表示
-                         calendarBody.appendChild(row);
+                         desktopCalendarBody.appendChild(row);
                     } else {
                          // 日付を含まない週（全てother-monthの場合）は追加しない
                          break; // ループを抜ける
                     }
                 }
+            }
+
+            // --- ウィークリーカレンダー生成関数 ---
+            function generateWeeklyCalendar(year, month) {
+                weeklyCalendarContainer.innerHTML = ''; // カレンダー内容をクリア
+                
+                const firstDay = new Date(year, month - 1, 1); // 月は0-indexedなので-1
+                const lastDay = new Date(year, month, 0); // その月の最終日
+                const daysInMonth = lastDay.getDate();
+                const startDayOfWeek = firstDay.getDay(); // 0:日曜, 1:月曜...
+
+                const today = new Date();
+                const todayDate = today.getDate();
+                const todayMonth = today.getMonth() + 1;
+                const todayYear = today.getFullYear();
+                
+                // 今日の日付が表示月に含まれるかチェック
+                const isTodayInThisMonth = (todayYear === year && todayMonth === month);
+                
+                // 週情報を格納する配列
+                const weeks = [];
+                
+                // 週単位でデータを生成
+                let date = 1;
+                let weekNumber = 1;
+
+                for (let i = 0; i < 6; i++) { // 最大6週間
+                    let weekHasDates = false;
+                    let weekStartDate = null;
+                    let weekEndDate = null;
+                    let containsToday = false;
+                    const weekDays = [];
+                    
+                    for (let j = 0; j < 7; j++) { // 曜日ループ (日〜土)
+                        if ((i === 0 && j < startDayOfWeek) || date > daysInMonth) {
+                            // 月の開始前または終了後は処理しない
+                            weekDays.push(null); // 空の日を追加
+                            continue;
+                        }
+
+                        weekHasDates = true;
+                        
+                        // 週の開始日と終了日を記録
+                        if (weekStartDate === null) {
+                            weekStartDate = date;
+                        }
+                        weekEndDate = date;
+                        
+                        // 今日の日付かどうかチェック
+                        if (date === todayDate && month === todayMonth && year === todayYear) {
+                            containsToday = true;
+                        }
+                        
+                        // 日付情報を作成
+                        const dayInfo = {
+                            date: date,
+                            dayOfWeek: j,
+                            isToday: (date === todayDate && month === todayMonth && year === todayYear),
+                            garbageItems: []
+                        };
+                        
+                        // ゴミ収集情報を追加
+                        const yearStr = String(year);
+                        const monthStr = String(month);
+                        const dateStr = String(date);
+
+                        if (garbageData[yearStr] && garbageData[yearStr][monthStr] && garbageData[yearStr][monthStr][dateStr]) {
+                            dayInfo.garbageItems = garbageData[yearStr][monthStr][dateStr].map(itemKey => {
+                                return garbageTypes[itemKey];
+                            }).filter(Boolean);
+                        }
+                        
+                        weekDays.push(dayInfo);
+                        date++;
+                    }
+                    
+                    // 週の情報を追加
+                    if (weekHasDates) {
+                        weeks.push({
+                            number: weekNumber,
+                            startDate: weekStartDate,
+                            endDate: weekEndDate,
+                            days: weekDays,
+                            containsToday: containsToday
+                        });
+                        weekNumber++;
+                    } else {
+                        // 日付を含まない週は追加しない
+                        break;
+                    }
+                }
+                
+                // 今日が含まれる週のインデックスを特定
+                let currentWeekIndex = 0;
+                const todayWeekIndex = weeks.findIndex(week => week.containsToday);
+                
+                if (todayWeekIndex !== -1) {
+                    currentWeekIndex = todayWeekIndex;
+                }
+                
+                // 週セレクターを作成（前の週、次の週ボタンなど）
+                const weekSelector = document.createElement('div');
+                weekSelector.classList.add('week-selector');
+                
+                // 前の週ボタン
+                const prevWeekBtn = document.createElement('button');
+                prevWeekBtn.classList.add('week-nav-btn');
+                prevWeekBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                `;
+                prevWeekBtn.disabled = currentWeekIndex === 0;
+                
+                // 次の週ボタン
+                const nextWeekBtn = document.createElement('button');
+                nextWeekBtn.classList.add('week-nav-btn');
+                nextWeekBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                `;
+                nextWeekBtn.disabled = currentWeekIndex === weeks.length - 1;
+                
+                // 週の範囲表示
+                const weekRange = document.createElement('div');
+                weekRange.classList.add('week-range');
+                
+                // ナビゲーションエリア
+                const weekNavigation = document.createElement('div');
+                weekNavigation.classList.add('week-navigation');
+                weekNavigation.appendChild(prevWeekBtn);
+                
+                weekSelector.appendChild(prevWeekBtn);
+                weekSelector.appendChild(weekRange);
+                weekSelector.appendChild(nextWeekBtn);
+                
+                weeklyCalendarContainer.appendChild(weekSelector);
+                
+                // 週表示を更新する関数
+                function updateWeekDisplay(weekIndex) {
+                    if (weekIndex < 0 || weekIndex >= weeks.length) return;
+                    
+                    currentWeekIndex = weekIndex;
+                    
+                    // ボタンの有効/無効状態を更新
+                    prevWeekBtn.disabled = currentWeekIndex === 0;
+                    nextWeekBtn.disabled = currentWeekIndex === weeks.length - 1;
+                    
+                    // 週の範囲表示を更新
+                    const week = weeks[currentWeekIndex];
+                    weekRange.innerHTML = `${month}月 ${week.startDate}日〜${week.endDate}日`;
+                    
+                    // 今日を含む週の場合、インジケーターを追加
+                    if (week.containsToday) {
+                        const todayIndicator = document.createElement('span');
+                        todayIndicator.classList.add('today-indicator');
+                        todayIndicator.textContent = '今日';
+                        weekRange.appendChild(todayIndicator);
+                    }
+                    
+                    // 以前の週表示を削除
+                    const oldWeekContainer = document.querySelector('.current-week-container');
+                    if (oldWeekContainer) {
+                        oldWeekContainer.remove();
+                    }
+                    
+                    // 週コンテナを作成
+                    const weekContainer = document.createElement('div');
+                    weekContainer.classList.add('week-container', 'current-week-container');
+                    
+                    // 週ヘッダーを作成
+                    const weekHeader = document.createElement('div');
+                    weekHeader.classList.add('week-header');
+                    weekHeader.textContent = `${month}月 ${week.startDate}日〜${week.endDate}日`;
+                    
+                    if (week.containsToday) {
+                        const todayBadge = document.createElement('span');
+                        todayBadge.classList.add('today-badge');
+                        todayBadge.textContent = '今日を含む';
+                        weekHeader.appendChild(todayBadge);
+                    }
+                    
+                    weekContainer.appendChild(weekHeader);
+                    
+                    // 曜日コンテナを作成
+                    const weekDays = document.createElement('div');
+                    weekDays.classList.add('week-days');
+                    weekContainer.appendChild(weekDays);
+                    
+                    // 各日を表示
+                    week.days.forEach((dayInfo, j) => {
+                        if (!dayInfo) return; // 空の日はスキップ
+                        
+                        // 日ごとのアイテムを作成
+                        const dayItem = document.createElement('div');
+                        dayItem.classList.add('day-item');
+                        
+                        // 曜日ラベル
+                        const dayLabel = document.createElement('div');
+                        dayLabel.classList.add('day-label');
+                        if (dayInfo.dayOfWeek === 0) dayLabel.classList.add('sun');
+                        if (dayInfo.dayOfWeek === 6) dayLabel.classList.add('sat');
+                        dayLabel.textContent = weekdayNames[dayInfo.dayOfWeek];
+                        dayItem.appendChild(dayLabel);
+                        
+                        // 日付と内容コンテナ
+                        const dayContent = document.createElement('div');
+                        dayContent.classList.add('day-content');
+                        
+                        // 日付表示
+                        const dayDate = document.createElement('div');
+                        dayDate.classList.add('day-date');
+                        dayDate.textContent = dayInfo.date;
+                        
+                        // 今日の日付チェック
+                        if (dayInfo.isToday) {
+                            const todayMarker = document.createElement('span');
+                            todayMarker.classList.add('today-marker');
+                            todayMarker.textContent = '今日';
+                            dayDate.appendChild(todayMarker);
+                            dayItem.classList.add('today-item');
+                        }
+                        
+                        dayContent.appendChild(dayDate);
+                        
+                        // ゴミ収集情報を追加
+                        dayInfo.garbageItems.forEach(item => {
+                            const garbageDiv = document.createElement('div');
+                            garbageDiv.classList.add('garbage-item', item.class);
+                            garbageDiv.innerHTML = 
+                                `<span class="garbage-item-icon">${item.icon}</span>${item.name}`;
+                            dayContent.appendChild(garbageDiv);
+                        });
+                        
+                        dayItem.appendChild(dayContent);
+                        weekDays.appendChild(dayItem);
+                    });
+                    
+                    weeklyCalendarContainer.appendChild(weekContainer);
+                }
+                
+                // ボタンのイベントリスナー
+                prevWeekBtn.addEventListener('click', () => {
+                    if (currentWeekIndex > 0) {
+                        updateWeekDisplay(currentWeekIndex - 1);
+                    }
+                });
+                
+                nextWeekBtn.addEventListener('click', () => {
+                    if (currentWeekIndex < weeks.length - 1) {
+                        updateWeekDisplay(currentWeekIndex + 1);
+                    }
+                });
+                
+                // 初期週を表示（今日の日付がある週）
+                updateWeekDisplay(currentWeekIndex);
+            }
+
+            // --- カレンダータイトル更新関数 ---
+            function updateCalendarTitle(year, month) {
+                calendarTitle.textContent = `${year}年 ${month}月`;
             }
 
             // --- 凡例生成関数 ---
@@ -566,6 +971,13 @@
                 }
             }
 
+            // --- 両方のカレンダーを更新する関数 ---
+            function updateCalendars(year, month) {
+                updateCalendarTitle(year, month);
+                generateDesktopCalendar(year, month);
+                generateWeeklyCalendar(year, month);
+            }
+
             // --- イベントリスナー ---
             prevMonthButton.addEventListener('click', () => {
                 currentMonth--;
@@ -579,7 +991,7 @@
                     currentMonth = 4;
                     return; // 何もせず終了
                 }
-                generateCalendar(currentYear, currentMonth);
+                updateCalendars(currentYear, currentMonth);
             });
 
             nextMonthButton.addEventListener('click', () => {
@@ -594,7 +1006,7 @@
                     currentMonth = 3;
                     return; // 何もせず終了
                 }
-                generateCalendar(currentYear, currentMonth);
+                updateCalendars(currentYear, currentMonth);
             });
 
             // タイトルをクリックすると今日の月に戻る機能
@@ -608,7 +1020,7 @@
                     if ((thisYear === 2025 && thisMonth >= 4) || (thisYear === 2026 && thisMonth <= 3)) {
                         currentYear = thisYear;
                         currentMonth = thisMonth;
-                        generateCalendar(currentYear, currentMonth);
+                        updateCalendars(currentYear, currentMonth);
                     }
                 }
             });
@@ -639,8 +1051,8 @@
             }
 
             // 初期化
-            generateCalendar(currentYear, currentMonth);
             generateLegend();
+            updateCalendars(currentYear, currentMonth);
             
             // ローディング表示の削除とコンテンツ表示
             document.body.classList.add('loaded');
